@@ -1,7 +1,14 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useSyncExternalStore } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 export const Navbar = () => {
+	const navigate = useNavigate()
+
+	const handleLogout =()=>{
+		localStorage.remove("token");
+		setStore({auth:false, token:null});
+		navigate('/login')
+	}
 	return (
 		<nav className="navbar navbar-light bg-light">
 			<div className="container">
@@ -12,6 +19,8 @@ export const Navbar = () => {
 					<Link to="/demo">
 						<button className="btn btn-primary">Check the Context in action</button>
 					</Link>
+					<button handleLogout={'/registro'}> Registrate</button>
+
 				</div>
 			</div>
 		</nav>
