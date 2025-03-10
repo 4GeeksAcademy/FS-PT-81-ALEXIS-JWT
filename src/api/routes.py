@@ -60,7 +60,7 @@ def login():
 def protected():
     id = get_jwt_identity()
     print('user id--->', id)
-    user = user.query.get(id)
+    user = User.query.get(id)
     return jsonify({'msn': 'OK', 'user': user.realize()})
 
 

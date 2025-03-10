@@ -2,6 +2,8 @@ import React from "react";
 import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Context } from "../store/appContext";
+import  "../../styles/home.css"
+import { useEffect } from "react";
 
 
 
@@ -10,6 +12,8 @@ import { Context } from "../store/appContext";
 export const Registro = () => {
     const { store, actions, } = useContext(Context);
     const navigate = useNavigate();
+    const [error, setError] = useState(null);
+
 
     const [form, setForm] = useState({
        
@@ -23,24 +27,37 @@ export const Registro = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (!form.email || !form.password) {
+            setError("Todos los campos son obligatorios");
             console.error("Todos los campos son obligatorios");
             return;
         }
         try {
             console.log("enviando datos de registro", form);
-            const succes = await actions.login(form, navigate);
+            const succes = await actions.register(form);
             if (succes) {
-                console.log("registro valido, redirigiendo....");
-                navigate("/private");
-            } 
+                console.log("Registro exitoso, redirigiendo al login...");
+                navigate("/login");  
+            } else {
+                console.error("Error en el registro, revisa los datos.");
+            }
+            
         } catch (error) {
             console.error("Error al registrar el usuario", error)
             
         }
-     };
+
+        
+            }
+            useEffect(()=>{
+                if (store.user){
+                    navigate("/login)");
+                }
+            }, [store.auth])
+        
+     
     return (
         <div className="bodygeneral">
-            <div className="bodyregister ">
+            <div className="bodyRegister ">
                 <h1 className="titleregister">Registrate</h1>
                 <form className="cuadroRegistro" onSubmit={handleSubmit}>
                 
@@ -68,7 +85,7 @@ export const Registro = () => {
                     </div>
                     <button className="butonregister" type="submit">Registrate</button>
                 </form>
-              {store.error && <p className="mensaje de error">{store.error}</p>} 
+              {store.error && <p className="mensaje-error">{store.error}</p>} 
             </div >
         </div>
     );

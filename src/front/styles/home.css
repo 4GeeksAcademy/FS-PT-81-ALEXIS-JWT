@@ -1,7 +1,51 @@
-/*
-    home.css: This website contains selectors only used in home.css
+/*REGISTRO*/
+.bodyRegister {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f4;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
 
-    All pages share the styles on index.css but you should create 
-    one more css for each page that will contain the selected used 
-    on that page only (the ones not reused in other pages).
-*/
+
+.cuadroRegistro {
+    background: white;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 350px;
+}
+
+/* Título */
+.cuadroRegistro h2 {
+    margin-bottom: 1rem;
+    font-size: 24px;
+    color: #333;
+}
+
+/* Estilo de los inputs */
+.cuadroRegistro input {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+   
+}
+
+
+/*LOGIN*/
+
+.login-container{
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f4;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}

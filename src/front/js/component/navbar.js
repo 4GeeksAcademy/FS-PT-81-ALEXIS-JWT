@@ -1,12 +1,17 @@
-import React, { useSyncExternalStore } from "react";
+import React from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useContext } from "react";
+import { Context } from "../store/appContext";
 
 export const Navbar = () => {
+	
 	const navigate = useNavigate()
+	const { store, actions } = useContext(Context);
+	
 
 	const handleLogout =()=>{
-		localStorage.remove("token");
-		setStore({auth:false, token:null});
+		localStorage.removeItem("token");
+		actions.logout();
 		navigate('/login')
 	}
 	return (
@@ -19,7 +24,14 @@ export const Navbar = () => {
 					<Link to="/demo">
 						<button className="btn btn-primary">Check the Context in action</button>
 					</Link>
-					<button handleLogout={'/registro'}> Registrate</button>
+					
+					{localStorage.getItem('token') && (
+  <button className="btn-exit btn btn-warning mx-5" onClick={() => handleLogout('/')}>
+    Salida por aquí
+  </button>
+)}
+
+
 
 				</div>
 			</div>

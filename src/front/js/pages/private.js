@@ -1,5 +1,6 @@
+import React from "react";
 import { useNavigate } from "react-router-dom";
-import { useContext, useEffect, useSyncExternalStore } from "react";
+import { useContext, useEffect} from "react";
 import { Context } from "../store/appContext";
 
 export const Private = () => {
@@ -7,15 +8,19 @@ export const Private = () => {
     const navigate = useNavigate();
 
     useEffect(() =>{
-        if(!store.auth){
+        if(!localStorage.getItem('token')){
             navigate('/login');
+        } else {
+            actions.getUserData();
+            
         }
-    }, [store.auth, navigate]);
+    }, []);
+    console.log("Usuario en store:", store.user)
 
     return (
 
         <div>
-            <h1>Bienvenido {store.user?.email}</h1>
+            <h1>Bienvenido {store.user?.email || "Usuario"}</h1>
         </div>
     )
 }

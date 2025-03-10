@@ -1,3 +1,5 @@
+import { Navigate } from "react-router-dom";
+
 const getState = ({ getStore, getActions, setStore }) => {
 	return {
 		store: {
@@ -19,51 +21,63 @@ const getState = ({ getStore, getActions, setStore }) => {
 		actions: {
 
 			logout: ()=>{
-				localStorage.remove('token');
+				localStorage.removeItem('token');
 				setStore({auth:false, token: null})
 
 			},
 			
 
-			getUserData: async () =>{
-				try{
-					const resp= await fetch('https://glorious-broccoli-7vr764xwv5gxhx467-3001.app.github.dev/api/protected',
-					{
-						method: 'GET',
-						headers:{
-							'Content-Type': 'application/json',
-							'Authorization':`Bearer ${localStorage.getItem('token')}`
+			getUserData: async () => {
+				try {
+					const resp = await fetch(
+						"https://glorious-broccoli-7vr764xwv5gxhx467-3001.app.github.dev/api/protected",
+						{
+							method: "GET",
+							headers: {
+								"Content-Type": "application/json",
+								Authorization: `Bearer ${localStorage.getItem("token")}`,
+							},
 						}
-					})
-					if (!resp.ok) throw new Error ('error registerin')
-					const data = await resp.json()
-					console.log(data)
-					
-					setStore({user: data.user})
-			} catch (error){
-				console.log(error);
-			}	
+					);
 			
-
-			},
-			register: async formData =>{
-				try{
-					const resp= await fetch('https://glorious-broccoli-7vr764xwv5gxhx467-3001.app.github.dev/api/register',
-						{method: 'POST',
-						headers: {
-							'Content-Type': 'application/json'
-						},
-						body: JSON.stringify(formData)
-				})
-					if(!resp.ok) throw new Error ("Error registrando")
-					const data = await resp.json()
-					console.log(data)
-					localStorage.setItem('token', data.token)
-					setStore({auth: true, token: data.token9})
+					if (!resp.ok) throw new Error("Error obteniendo datos del usuario");
+			
+					const data = await resp.json();
+					console.log("Datos del usuario recibidos:", data);
+					localStorage.setItem("token:", data.token)
+			
+					setStore({ user: data.user, auth: true }); 
 				} catch (error) {
-					console.log(error);
+					console.error("Error en getUserData:", error);
+					setStore({ auth: false }); 
 				}
 			},
+			
+			
+			register: async (formData) => {
+				try {
+					const resp = await fetch('https://glorious-broccoli-7vr764xwv5gxhx467-3001.app.github.dev/api/register', {
+						method: 'POST',
+						headers: { 'Content-Type': 'application/json' },
+						body: JSON.stringify(formData),
+					});
+			
+					if (!resp.ok) {
+						const errorData = await resp.json();
+						console.error("Error registrando usuario:", errorData);
+						return false;
+					}
+			
+					const data = await resp.json();
+					console.log("Usuario registrado exitosamente:", data);
+					return true;  
+				} catch (error) {
+					console.error("Error en el registro:", error);
+					return false;
+				}
+			},
+			
+			
 
 			login: async formData=> {
 				try{
@@ -79,8 +93,11 @@ const getState = ({ getStore, getActions, setStore }) => {
 					console.log(data)
 					localStorage.setItem('token', data.token)
 					setStore({auth: true, token: data.token})
+					await getActions().getUserData();
+					return true;
 				} catch (error){
 					console.log(error);
+					return false;
 				}
 			},
 
